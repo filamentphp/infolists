@@ -6,7 +6,6 @@ use BackedEnum;
 use Closure;
 use Filament\Support\Contracts\HasLabel as LabelInterface;
 use Illuminate\Contracts\Support\Arrayable;
-use stdClass;
 
 class TextEntry extends Entry
 {
@@ -30,6 +29,8 @@ class TextEntry extends Entry
     protected bool | Closure $isBadge = false;
 
     protected bool | Closure $isBulleted = false;
+
+    protected bool | Closure $isProse = false;
 
     protected bool | Closure $isListWithLineBreaks = false;
 
@@ -89,18 +90,16 @@ class TextEntry extends Entry
         return $this;
     }
 
-    public function rowIndex(bool $isFromZero = false): static
+    public function wrap(bool | Closure $condition = true): static
     {
-        $this->getStateUsing(static function (stdClass $rowLoop) use ($isFromZero): string {
-            return (string) $rowLoop->{$isFromZero ? 'index' : 'iteration'};
-        });
+        $this->canWrap = $condition;
 
         return $this;
     }
 
-    public function wrap(bool | Closure $condition = true): static
+    public function prose(bool | Closure $condition = true): static
     {
-        $this->canWrap = $condition;
+        $this->isProse = $condition;
 
         return $this;
     }
@@ -118,6 +117,11 @@ class TextEntry extends Entry
     public function isBulleted(): bool
     {
         return (bool) $this->evaluate($this->isBulleted);
+    }
+
+    public function isProse(): bool
+    {
+        return (bool) $this->evaluate($this->isProse);
     }
 
     public function isListWithLineBreaks(): bool

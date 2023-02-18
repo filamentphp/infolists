@@ -2,7 +2,6 @@
 
 namespace Filament\Infolists\Components\Concerns;
 
-use BackedEnum;
 use Closure;
 use Filament\Infolists\Components\Component;
 use Filament\Support\Contracts\HasColor as ColorInterface;
@@ -58,6 +57,6 @@ trait HasColor
             return null;
         }
 
-        return $color->getColor();
+        return $state->getColor();
     }
 }

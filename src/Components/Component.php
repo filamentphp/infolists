@@ -5,6 +5,7 @@ namespace Filament\Infolists\Components;
 use Filament\Infolists\Concerns\HasColumns;
 use Filament\Support\Components\ViewComponent;
 use Filament\Support\Concerns\HasExtraAttributes;
+use ReflectionParameter;
 
 class Component extends ViewComponent
 {
@@ -26,17 +27,12 @@ class Component extends ViewComponent
 
     protected string $evaluationIdentifier = 'component';
 
-    /**
-     * @return array<string, mixed>
-     */
-    protected function getDefaultEvaluationParameters(): array
+    protected function resolveClosureDependencyForEvaluation(ReflectionParameter $parameter): mixed
     {
-        return array_merge(parent::getDefaultEvaluationParameters(), [
+        return match ($parameter->getName()) {
             'record' => $this->getRecord(),
-            'state' => $this->resolveEvaluationParameter(
-                'state',
-                fn (): mixed => $this->getState(),
-            ),
-        ]);
+            'state' => $this->getState(),
+            default => parent::resolveClosureDependencyForEvaluation($parameter),
+        };
     }
 }

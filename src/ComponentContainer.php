@@ -4,11 +4,9 @@ namespace Filament\Infolists;
 
 use Filament\Support\Components\ViewComponent;
 use Illuminate\Database\Eloquent\Model;
-use Livewire\Component;
 
 class ComponentContainer extends ViewComponent
 {
-    use Concerns\BelongsToLivewire;
     use Concerns\BelongsToParentComponent;
     use Concerns\CanBeHidden;
     use Concerns\Cloneable;
@@ -24,14 +22,9 @@ class ComponentContainer extends ViewComponent
 
     protected string $viewIdentifier = 'container';
 
-    final public function __construct(?Component $livewire = null)
+    public static function make(): static
     {
-        $this->livewire($livewire);
-    }
-
-    public static function make(?Component $livewire = null): static
-    {
-        return app(static::class, ['livewire' => $livewire]);
+        return app(static::class);
     }
 
     /**

@@ -1,5 +1,4 @@
 @props([
-    'actions' => [],
     'color' => null,
     'icon' => null,
 ])
@@ -9,11 +8,10 @@
     match ($color) {
         'danger' => 'text-danger-500 dark:text-danger-300',
         'gray', null => 'text-gray-500 dark:text-gray-300',
-        'info' => 'text-info-500 dark:text-info-300',
-        'primary' => 'text-primary-500 dark:text-primary-300',
         'secondary' => 'text-secondary-500 dark:text-secondary-300',
         'success' => 'text-success-500 dark:text-success-300',
         'warning' => 'text-warning-500 dark:text-warning-300',
+        'primary' => 'text-primary-500 dark:text-primary-300',
         default => $color,
     },
 ]) }}>
@@ -29,13 +27,5 @@
             alias="filament-infolists::entry-wrapper.hint"
             size="h-5 w-5"
         />
-    @endif
-
-    @if (count($actions))
-        <div class="filament-infolists-entry-wrapper-hint-action flex gap-1 items-center">
-            @foreach ($actions as $action)
-                {{ $action }}
-            @endforeach
-        </div>
     @endif
 </div>

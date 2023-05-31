@@ -52,22 +52,19 @@ trait CanGetStateFromRelationships
 
             if ($currentRelationshipValue instanceof Collection) {
                 if (! count($relationships)) {
-                    $results = [
-                        ...$results,
-                        ...$currentRelationshipValue->all(),
-                    ];
+                    $results = array_merge($results, $currentRelationshipValue->all());
 
                     continue;
                 }
 
                 foreach ($currentRelationshipValue as $valueRecord) {
-                    $results = [
-                        ...$results,
-                        ...$this->getRelationshipResults(
+                    $results = array_merge(
+                        $results,
+                        $this->getRelationshipResults(
                             $valueRecord,
                             $relationships,
                         ),
-                    ];
+                    );
                 }
 
                 break;

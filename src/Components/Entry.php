@@ -2,16 +2,18 @@
 
 namespace Filament\Infolists\Components;
 
+use Filament\Infolists\Components\Contracts\HasHintActions;
+use Filament\Support\Concerns\HasAlignment;
 use Illuminate\Contracts\Support\Htmlable;
 
-class Entry extends Component
+class Entry extends Component implements HasHintActions
 {
     use Concerns\CanOpenUrl;
-    use Concerns\HasAlignment;
     use Concerns\HasHelperText;
     use Concerns\HasHint;
     use Concerns\HasName;
     use Concerns\HasTooltip;
+    use HasAlignment;
 
     protected string $viewIdentifier = 'entry';
 
@@ -45,5 +47,10 @@ class Entry extends Component
         return (is_string($label) && $this->shouldTranslateLabel) ?
             __($label) :
             $label;
+    }
+
+    public function getKey(): string
+    {
+        return parent::getKey() ?? $this->getStatePath();
     }
 }

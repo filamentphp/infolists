@@ -4,11 +4,12 @@ namespace Filament\Infolists\Components;
 
 use Closure;
 use Filament\Infolists\Components\Tabs\Tab;
-use Filament\Support\Concerns\HasExtraAlpineAttributes;
+use Filament\Support\Concerns;
 
 class Tabs extends Component
 {
-    use HasExtraAlpineAttributes;
+    use Concerns\CanBeContained;
+    use Concerns\HasExtraAlpineAttributes;
 
     /**
      * @var view-string

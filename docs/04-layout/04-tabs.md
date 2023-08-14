@@ -120,7 +120,26 @@ Tabs::make('Label')
     ])
 ```
 
-<AutoScreenshot name="infolists/layout/tabs/icons" alt="Tabs with icons" version="3.x" />
+<AutoScreenshot name="forms/layout/tabs/icons" alt="Tabs with icons" version="3.x" />
+
+### Setting the tab icon color
+
+The icon of the tab may have a color to indicate its significance using the `iconColor()` method. It may be either `danger`, `gray`, `info`, `primary`, `success` or `warning`:
+
+```php
+use Filament\Infolists\Components\Tabs;
+
+Tabs::make('Label')
+    ->tabs([
+        Tabs\Tab::make('Notifications')
+            ->icon('heroicon-m-bell')
+            ->iconColor('primary')
+            ->schema([
+                // ...
+            ]),
+        // ...
+    ])
+```
 
 ### Setting the tab icon position
 
@@ -128,13 +147,12 @@ The icon of the tab may be positioned before or after the label using the `iconP
 
 ```php
 use Filament\Infolists\Components\Tabs;
-use Filament\Support\Enums\IconPosition;
 
 Tabs::make('Label')
     ->tabs([
         Tabs\Tab::make('Notifications')
             ->icon('heroicon-m-bell')
-            ->iconPosition(IconPosition::After)
+            ->iconPosition('after')
             ->schema([
                 // ...
             ]),
@@ -180,29 +198,4 @@ Tabs::make('Label')
             ->columns(3),
         // ...
     ])
-```
-
-## Removing the styled container
-
-By default, tabs and their content are wrapped in a container styled as a card. You may remove the styled container using `contained()`:
-
-```php
-use Filament\Infolists\Components\Tabs;
-
-Tabs::make('Label')
-    ->tabs([
-        Tabs\Tab::make('Tab 1')
-            ->schema([
-                // ...
-            ]),
-        Tabs\Tab::make('Tab 2')
-            ->schema([
-                // ...
-            ]),
-        Tabs\Tab::make('Tab 3')
-            ->schema([
-                // ...
-            ]),
-    ])
-    ->contained(false)
 ```

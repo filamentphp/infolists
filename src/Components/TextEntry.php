@@ -4,7 +4,6 @@ namespace Filament\Infolists\Components;
 
 use Closure;
 use Filament\Infolists\Components\Contracts\HasAffixActions;
-use Filament\Infolists\Components\TextEntry\TextEntrySize;
 use Filament\Support\Concerns\CanBeCopied;
 
 class TextEntry extends Entry implements HasAffixActions
@@ -15,6 +14,7 @@ class TextEntry extends Entry implements HasAffixActions
     use Concerns\HasColor;
     use Concerns\HasFontFamily;
     use Concerns\HasIcon;
+    use Concerns\HasSize;
     use Concerns\HasWeight;
 
     /**
@@ -31,8 +31,6 @@ class TextEntry extends Entry implements HasAffixActions
     protected bool | Closure $isListWithLineBreaks = false;
 
     protected int | Closure | null $listLimit = null;
-
-    protected TextEntrySize | string | Closure | null $size = null;
 
     public function badge(bool | Closure $condition = true): static
     {
@@ -67,20 +65,6 @@ class TextEntry extends Entry implements HasAffixActions
         $this->isProse = $condition;
 
         return $this;
-    }
-
-    public function size(TextEntrySize | string | Closure | null $size): static
-    {
-        $this->size = $size;
-
-        return $this;
-    }
-
-    public function getSize(mixed $state): TextEntrySize | string | null
-    {
-        return $this->evaluate($this->size, [
-            'state' => $state,
-        ]);
     }
 
     public function isBadge(): bool

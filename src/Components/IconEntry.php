@@ -3,7 +3,6 @@
 namespace Filament\Infolists\Components;
 
 use Closure;
-use Filament\Infolists\Components\IconEntry\IconEntrySize;
 
 class IconEntry extends Entry
 {
@@ -13,6 +12,7 @@ class IconEntry extends Entry
     use Concerns\HasIcon {
         getIcon as getBaseIcon;
     }
+    use Concerns\HasSize;
 
     /**
      * @var view-string
@@ -34,8 +34,6 @@ class IconEntry extends Entry
     protected string | array | Closure | null $trueColor = null;
 
     protected string | Closure | null $trueIcon = null;
-
-    protected IconEntrySize | string | Closure | null $size = null;
 
     public function boolean(bool | Closure $condition = true): static
     {
@@ -102,20 +100,6 @@ class IconEntry extends Entry
         $this->trueIcon = $icon;
 
         return $this;
-    }
-
-    public function size(IconEntrySize | string | Closure | null $size): static
-    {
-        $this->size = $size;
-
-        return $this;
-    }
-
-    public function getSize(mixed $state): IconEntrySize | string | null
-    {
-        return $this->evaluate($this->size, [
-            'state' => $state,
-        ]);
     }
 
     public function getIcon(mixed $state): ?string

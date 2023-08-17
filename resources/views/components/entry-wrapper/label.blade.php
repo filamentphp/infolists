@@ -4,13 +4,11 @@
 ])
 
 <dt
-    {{ $attributes->class(['filament-infolists-entry-wrapper-label inline-flex items-center space-x-3 rtl:space-x-reverse']) }}
+    {{ $attributes->class(['fi-in-entry-wrp-label inline-flex items-center gap-x-3']) }}
 >
     {{ $prefix }}
 
-    <span
-        class="text-sm font-medium leading-4 text-gray-500 dark:text-gray-400"
-    >
+    <span class="text-sm font-medium leading-6 text-gray-950 dark:text-white">
         {{ $slot }}
     </span>
 

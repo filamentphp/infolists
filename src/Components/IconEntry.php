@@ -3,6 +3,7 @@
 namespace Filament\Infolists\Components;
 
 use Closure;
+use Filament\Infolists\Components\IconEntry\IconEntrySize;
 
 class IconEntry extends Entry
 {
@@ -12,7 +13,6 @@ class IconEntry extends Entry
     use Concerns\HasIcon {
         getIcon as getBaseIcon;
     }
-    use Concerns\HasSize;
 
     /**
      * @var view-string
@@ -35,6 +35,8 @@ class IconEntry extends Entry
 
     protected string | Closure | null $trueIcon = null;
 
+    protected IconEntrySize | string | Closure | null $size = null;
+
     public function boolean(bool | Closure $condition = true): static
     {
         $this->isBoolean = $condition;
@@ -45,7 +47,7 @@ class IconEntry extends Entry
     /**
      * @param  string | array{50: string, 100: string, 200: string, 300: string, 400: string, 500: string, 600: string, 700: string, 800: string, 900: string, 950: string} | Closure | null  $color
      */
-    public function false(string | Closure $icon = null, string | array | Closure $color = null): static
+    public function false(string | Closure | null $icon = null, string | array | Closure | null $color = null): static
     {
         $this->falseIcon($icon);
         $this->falseColor($color);
@@ -75,7 +77,7 @@ class IconEntry extends Entry
     /**
      * @param  string | array{50: string, 100: string, 200: string, 300: string, 400: string, 500: string, 600: string, 700: string, 800: string, 900: string, 950: string} | Closure | null  $color
      */
-    public function true(string | Closure $icon = null, string | array | Closure $color = null): static
+    public function true(string | Closure | null $icon = null, string | array | Closure | null $color = null): static
     {
         $this->trueIcon($icon);
         $this->trueColor($color);
@@ -100,6 +102,20 @@ class IconEntry extends Entry
         $this->trueIcon = $icon;
 
         return $this;
+    }
+
+    public function size(IconEntrySize | string | Closure | null $size): static
+    {
+        $this->size = $size;
+
+        return $this;
+    }
+
+    public function getSize(mixed $state): IconEntrySize | string | null
+    {
+        return $this->evaluate($this->size, [
+            'state' => $state,
+        ]);
     }
 
     public function getIcon(mixed $state): ?string

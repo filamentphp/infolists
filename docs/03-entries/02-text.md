@@ -58,7 +58,7 @@ TextEntry::make('created_at')
 
 ## Number formatting
 
-The `numeric()` method allows you to format an entry as a number, using PHP's `number_format()`:
+The `numeric()` method allows you to format a entry as a number, using PHP's `number_format()`:
 
 ```php
 use Filament\Infolists\Components\TextEntry;
@@ -247,56 +247,55 @@ TextEntry::make('email')
 You may set the position of an icon using `iconPosition()`:
 
 ```php
-use Filament\Infolists\Components\TextEntry;use Filament\Support\Enums\IconPosition;
+use Filament\Infolists\Components\TextEntry;
 
 TextEntry::make('email')
     ->icon('heroicon-m-envelope')
-    ->iconPosition(IconPosition::After) // `IconPosition::Before` or `IconPosition::After`
+    ->iconPosition('after') // `before` or `after`
 ```
 
 <AutoScreenshot name="infolists/entries/text/icon-after" alt="Text entry with icon after" version="3.x" />
 
 ## Customizing the text size
 
-You may make the text larger using `size(TextEntrySize::Large)`:
+You may make the text larger using `size('lg')`:
 
 ```php
 use Filament\Infolists\Components\TextEntry;
 
 TextEntry::make('title')
-    ->size(TextEntry\TextEntrySize::Large)
+    ->size('lg')
 ```
 
 <AutoScreenshot name="infolists/entries/text/large" alt="Text entry in a large font size" version="3.x" />
 
 ## Customizing the font weight
 
-Text entries have regular font weight by default, but you may change this to any of the following options: `FontWeight::Thin`, `FontWeight::ExtraLight`, `FontWeight::Light`, `FontWeight::Medium`, `FontWeight::SemiBold`, `FontWeight::Bold`, `FontWeight::ExtraBold` or `FontWeight::Black`.
+Text entries have regular font weight by default but you may change this to any of the the following options: `thin`, `extralight`, `light`, `medium`, `semibold`, `bold`, `extrabold` or `black`.
 
-For instance, you may make the font bold using `weight(FontWeight::Bold)`:
+For instance, you may make the font bold using `weight('bold')`:
 
 ```php
-use Filament\Infolists\Components\TextEntry;use Filament\Support\Enums\FontWeight;
+use Filament\Infolists\Components\TextEntry;
 
 TextEntry::make('title')
-    ->weight(FontWeight::Bold)
+    ->weight('bold')
 ```
 
-<AutoScreenshot name="infolists/entries/text/bold" alt="Text entry in a bold font" version="3.x" />
+<AutoScreenshot name="infolists/entries/text/bolt" alt="Text entry in a bold font" version="3.x" />
 
 ## Customizing the font family
 
-You can change the text font family to any of the following options: `FontFamily::Sans`, `FontFamily::Serif` or `FontFamily::Mono`.
+You can change the text font family to any of the following options: `sans`, `serif` or `mono`.
 
-For instance, you may make the font monospaced using `fontFamily(FontFamily::Mono)`:
+For instance, you may make the font monospaced using `fontFamily('mono')`:
 
 ```php
-use Filament\Support\Enums\FontFamily;
 use Filament\Infolists\Components\TextEntry;
 
 TextEntry::make('apiKey')
     ->label('API key')
-    ->fontFamily(FontFamily::Mono)
+    ->fontFamily('mono')
 ```
 
 <AutoScreenshot name="infolists/entries/text/mono" alt="Text entry in a monospaced font" version="3.x" />

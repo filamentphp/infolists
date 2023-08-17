@@ -9,7 +9,6 @@ use Filament\Infolists\Components\Component;
 use Filament\Infolists\Infolist;
 use Filament\Support\Exceptions\Cancel;
 use Filament\Support\Exceptions\Halt;
-use function Livewire\store;
 
 trait InteractsWithInfolists
 {
@@ -116,7 +115,7 @@ trait InteractsWithInfolists
         $action->resetArguments();
         $action->resetFormData();
 
-        if (store($this)->has('redirect')) {
+        if (filled($this->redirectTo)) {
             return $result;
         }
 
@@ -125,7 +124,7 @@ trait InteractsWithInfolists
         return $result;
     }
 
-    public function mountInfolistAction(string $name, ?string $component = null, ?string $infolist = null): mixed
+    public function mountInfolistAction(string $name, string $component = null, string $infolist = null): mixed
     {
         $this->mountedInfolistActions[] = $name;
         $this->mountedInfolistActionsData[] = [];
@@ -174,7 +173,7 @@ trait InteractsWithInfolists
         } catch (Halt $exception) {
             return null;
         } catch (Cancel $exception) {
-            $this->unmountInfolistAction(shouldCancelParentActions: false);
+            $this->unmountInfolistAction(shouldCloseParentActions: false);
 
             return null;
         }
@@ -185,7 +184,9 @@ trait InteractsWithInfolists
 
         $this->resetErrorBag();
 
-        $this->dispatch('open-modal', id: "{$this->getId()}-infolist-action");
+        $this->dispatchBrowserEvent('open-modal', [
+            'id' => "{$this->id}-infolist-action",
+        ]);
 
         return null;
     }
@@ -250,26 +251,26 @@ trait InteractsWithInfolists
         );
     }
 
-    public function unmountInfolistAction(bool $shouldCancelParentActions = true): void
+    public function unmountInfolistAction(bool $shouldCloseParentActions = true): void
     {
         $action = $this->getMountedInfolistAction();
 
-        if (! ($shouldCancelParentActions && $action)) {
+        if (! ($shouldCloseParentActions && $action)) {
             array_pop($this->mountedInfolistActions);
             array_pop($this->mountedInfolistActionsData);
-        } elseif ($action->shouldCancelAllParentActions()) {
+        } elseif ($action->shouldCloseAllParentActions()) {
             $this->mountedInfolistActions = [];
             $this->mountedInfolistActionsData = [];
         } else {
-            $parentActionToCancelTo = $action->getParentActionToCancelTo();
+            $parentActionToCloseTo = $action->getParentActionToCloseTo();
 
             while (true) {
                 $recentlyClosedParentAction = array_pop($this->mountedInfolistActions);
                 array_pop($this->mountedInfolistActionsData);
 
                 if (
-                    blank($parentActionToCancelTo) ||
-                    ($recentlyClosedParentAction === $parentActionToCancelTo)
+                    blank($parentActionToCloseTo) ||
+                    ($recentlyClosedParentAction === $parentActionToCloseTo)
                 ) {
                     break;
                 }
@@ -280,7 +281,9 @@ trait InteractsWithInfolists
             $this->mountedInfolistActionsComponent = null;
             $this->mountedInfolistActionsInfolist = null;
 
-            $this->dispatch('close-modal', id: "{$this->getId()}-infolist-action");
+            $this->dispatchBrowserEvent('close-modal', [
+                'id' => "{$this->id}-infolist-action",
+            ]);
 
             return;
         }
@@ -292,7 +295,9 @@ trait InteractsWithInfolists
 
         $this->resetErrorBag();
 
-        $this->dispatch('open-modal', id: "{$this->getId()}-infolist-action");
+        $this->dispatchBrowserEvent('open-modal', [
+            'id' => "{$this->id}-infolist-action",
+        ]);
     }
 
     protected function makeInfolist(): Infolist

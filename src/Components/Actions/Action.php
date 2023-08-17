@@ -45,9 +45,8 @@ class Action extends MountableAction
     protected function resolveDefaultClosureDependencyForEvaluationByName(string $parameterName): array
     {
         return match ($parameterName) {
-            'record' => [$this->getInfolistComponent()->getRecord()],
+            'record' => [$this->getRecord()],
             'infolist' => [$this->getInfolist()],
-            'infolistComponent' => [$this->getInfolistComponent()],
             default => parent::resolveDefaultClosureDependencyForEvaluationByName($parameterName),
         };
     }

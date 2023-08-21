@@ -1,8 +1,8 @@
-@php
-    $isContained = $isContained();
-@endphp
-
 <x-dynamic-component :component="$getEntryWrapperView()" :entry="$entry">
+    @php
+        $isWrappedInCard = $isWrappedInCard();
+    @endphp
+
     <ul
         {{
             $attributes
@@ -10,7 +10,7 @@
                     'id' => $getId(),
                 ], escape: false)
                 ->merge($getExtraAttributes(), escape: false)
-                ->class(['fi-in-repeatable'])
+                ->class(['filament-infolists-repeatable-entry'])
         }}
     >
         <x-filament::grid
@@ -20,13 +20,13 @@
             :lg="$getGridColumns('lg')"
             :xl="$getGridColumns('xl')"
             :two-xl="$getGridColumns('2xl')"
-            class="gap-4"
+            class="gap-2"
         >
             @foreach ($getChildComponentContainers() as $container)
                 <li
                     @class([
                         'block',
-                        'rounded-xl bg-white p-4 shadow-sm ring-1 ring-gray-950/5 dark:bg-white/5 dark:ring-white/10' => $isContained,
+                        'rounded-xl bg-white p-6 shadow-sm ring-1 ring-gray-950/5 dark:bg-gray-800 dark:ring-white/20' => $isWrappedInCard,
                     ])
                 >
                     {{ $container }}

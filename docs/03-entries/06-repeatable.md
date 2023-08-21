@@ -5,7 +5,7 @@ import AutoScreenshot from "@components/AutoScreenshot.astro"
 
 ## Overview
 
-The repeatable entry allows you to repeat a set of entries and layout components for items in an array or relationship.
+The repeatable entry allows you repeat a set of entries and layout components for items in an array or relationship.
 
 ```php
 use Filament\Infolists\Components\RepeatableEntry;
@@ -43,9 +43,9 @@ This method accepts the same options as the `columns()` method of the [grid](../
 
 <AutoScreenshot name="infolists/entries/repeatable/grid" alt="Repeatable entry in grid layout" version="3.x" />
 
-## Removing the styled container
+## Removing the wrapping card
 
-By default, each item in a repeatable entry is wrapped in a container styled as a card. You may remove the styled container using `contained()`:
+By default, each item in a repeatable entry gets wrapped in a card. This behavior can be disabled using `wrappedInCard()`:
 
 ```php
 use Filament\Infolists\Components\RepeatableEntry;
@@ -54,5 +54,5 @@ RepeatableEntry::make('comments')
     ->schema([
         // ...
     ])
-    ->contained(false)
+    ->wrappedInCard(false)
 ```

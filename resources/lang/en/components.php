@@ -2,7 +2,7 @@
 
 return [
 
-    'text_entry' => [
+    'text' => [
         'more_list_items' => 'and :count more',
     ],
 

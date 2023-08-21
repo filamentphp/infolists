@@ -1,4 +1,9 @@
+@php
+    $isContained = $isContained();
+@endphp
+
 <div
+    x-cloak
     x-data="{
         tab: null,
 
@@ -23,7 +28,6 @@
             history.pushState(null, document.title, url.toString())
         },
     }"
-    x-cloak
     {{
         $attributes
             ->merge([
@@ -31,29 +35,29 @@
             ], escape: false)
             ->merge($getExtraAttributes(), escape: false)
             ->merge($getExtraAlpineAttributes(), escape: false)
-            ->class(['filament-infolists-tabs-component rounded-xl bg-white shadow-sm ring-1 ring-gray-950/5 dark:bg-gray-800 dark:ring-white/20'])
+            ->class([
+                'fi-in-tabs flex flex-col',
+                'rounded-xl bg-white shadow-sm ring-1 ring-gray-950/5 dark:bg-gray-900 dark:ring-white/10' => $isContained,
+            ])
     }}
 >
-    <div class="p-1">
-        <x-filament::tabs :label="$getLabel()">
-            @foreach ($getChildComponentContainer()->getComponents() as $tab)
-                @php
-                    $tabId = $tab->getId();
-                @endphp
+    <x-filament::tabs :contained="$isContained" :label="$getLabel()">
+        @foreach ($getChildComponentContainer()->getComponents() as $tab)
+            @php
+                $tabId = $tab->getId();
+            @endphp
 
-                <x-filament::tabs.item
-                    :x-on:click="'tab = \'' . $tabId . '\''"
-                    :alpine-active="'tab === \'' . $tabId . '\''"
-                    :badge="$tab->getBadge()"
-                    :icon="$tab->getIcon()"
-                    :icon-color="$tab->getIconColor()"
-                    :icon-position="$tab->getIconPosition()"
-                >
-                    {{ $tab->getLabel() }}
-                </x-filament::tabs.item>
-            @endforeach
-        </x-filament::tabs>
-    </div>
+            <x-filament::tabs.item
+                :alpine-active="'tab === \'' . $tabId . '\''"
+                :badge="$tab->getBadge()"
+                :icon="$tab->getIcon()"
+                :icon-position="$tab->getIconPosition()"
+                :x-on:click="'tab = \'' . $tabId . '\''"
+            >
+                {{ $tab->getLabel() }}
+            </x-filament::tabs.item>
+        @endforeach
+    </x-filament::tabs>
 
     @foreach ($getChildComponentContainer()->getComponents() as $tab)
         {{ $tab }}

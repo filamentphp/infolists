@@ -5,7 +5,7 @@ import AutoScreenshot from "@components/AutoScreenshot.astro"
 
 ## Overview
 
-Entry classes can be found in the `Filament\Infolists\Components` namespace. You can put them inside the `$infolist->schema()` method:
+Entry classes can be found in the `Filament\Infolists\Components` namespace. You can put them inside the `$infolist->entries()` method:
 
 ```php
 use Filament\Infolists\Infolist;
@@ -13,7 +13,7 @@ use Filament\Infolists\Infolist;
 public function infolist(Infolist $infolist): Infolist
 {
     return $infolist
-        ->schema([
+        ->entries([
             // ...
         ]);
 }
@@ -87,7 +87,7 @@ TextEntry::make('title')
 
 ## Setting a default value
 
-To set a default value for entries with an empty state, you may use the `default()` method. This method will treat the default state as if it were real, so entries like [image](image) or [color](color) will display the default image or color.
+To set a default value for fields with a `null` state, you may use the `default()` method:
 
 ```php
 use Filament\Infolists\Components\TextEntry;
@@ -96,46 +96,17 @@ TextEntry::make('title')
     ->default('Untitled')
 ```
 
-## Adding placeholder text if an entry is empty
-
-Sometimes you may want to display placeholder text for entries with an empty state, which is styled as a lighter gray text. This differs from the [default value](#setting-a-default-value), as the placeholder is always text and not treated as if it were real state.
-
-```php
-use Filament\Infolists\Components\TextEntry;
-
-TextEntry::make('title')
-    ->placeholder('Untitled')
-```
-
-<AutoScreenshot name="infolists/entries/placeholder" alt="Entry with a placeholder for empty state" version="3.x" />
-
 ## Adding helper text below the entry
 
 Sometimes, you may wish to provide extra information for the user of the infolist. For this purpose, you may add helper text below the entry.
 
-The `helperText()` method is used to add helper text:
+The `helperText()` method is used to add helper text, and supports Markdown formatting:
 
 ```php
 use Filament\Infolists\Components\TextEntry;
 
 TextEntry::make('name')
-    ->helperText('Your full name here, including any middle names.')
-```
-
-This method accepts a plain text string, or an instance of `Illuminate\Support\HtmlString` or `Illuminate\Contracts\Support\Htmlable`. This allows you to render HTML, or even markdown, in the helper text:
-
-```php
-use Filament\Infolists\Components\TextEntry;
-use Illuminate\Support\HtmlString;
-
-TextEntry::make('name')
-    ->helperText(new HtmlString('Your <strong>full name</strong> here, including any middle names.'))
-
-TextEntry::make('name')
-    ->helperText(str('Your **full name** here, including any middle names.')->inlineMarkdown()->toHtmlString())
-
-TextEntry::make('name')
-    ->helperText(view('name-helper-text'))
+    ->helperText('Your **full name** here, including any middle names.')
 ```
 
 <AutoScreenshot name="infolists/entries/helper-text" alt="Entry with helper text" version="3.x" />
@@ -144,32 +115,14 @@ TextEntry::make('name')
 
 As well as [helper text](#adding-helper-text-below-the-entry) below the entry, you may also add a "hint" next to the label of the entry. This is useful for displaying additional information about the entry, such as a link to a help page.
 
-The `hint()` method is used to add a hint:
+The `hint()` method is used to add a hint, and supports Markdown formatting:
 
 ```php
 use Filament\Infolists\Components\TextEntry;
 
 TextEntry::make('apiKey')
     ->label('API key')
-    ->hint('Documentation? What documentation?!')
-```
-
-This method accepts a plain text string, or an instance of `Illuminate\Support\HtmlString` or `Illuminate\Contracts\Support\Htmlable`. This allows you to render HTML, or even markdown, in the helper text:
-
-```php
-use Filament\Infolists\Components\TextEntry;
-
-TextEntry::make('apiKey')
-    ->label('API key')
-    ->hint(new HtmlString('<a href="/documentation">Documentation</a>'))
-
-TextEntry::make('apiKey')
-    ->label('API key')
-    ->hint(str('[Documentation](/documentation)')->inlineMarkdown()->toHtmlString())
-
-TextEntry::make('apiKey')
-    ->label('API key')
-    ->hint(view('api-key-hint'))
+    ->hint('[Documentation](/documentation)')
 ```
 
 <AutoScreenshot name="infolists/entries/hint" alt="Entry with hint" version="3.x" />
@@ -183,7 +136,7 @@ use Filament\Infolists\Components\TextEntry;
 
 TextEntry::make('apiKey')
     ->label('API key')
-    ->hint(str('[Documentation](/documentation)')->inlineMarkdown()->toHtmlString())
+    ->hint('[Documentation](/documentation)')
     ->hintColor('primary')
 ```
 
@@ -198,24 +151,11 @@ use Filament\Infolists\Components\TextEntry;
 
 TextEntry::make('apiKey')
     ->label('API key')
-    ->hint(str('[Documentation](/documentation)')->inlineMarkdown()->toHtmlString())
+    ->hint('[Documentation](/documentation)')
     ->hintIcon('heroicon-m-question-mark-circle')
 ```
 
 <AutoScreenshot name="infolists/entries/hint-icon" alt="Entry with hint icon" version="3.x" />
-
-#### Adding a tooltip to a hint icon
-
-Additionally, you can add a tooltip to display when you hover over the hint icon, using the `tooltip` parameter of `hintIcon()`:
-
-```php
-use Filament\Infolists\Components\TextEntry;
-
-TextEntry::make('apiKey')
-    ->label('API key')
-    ->hint(str('[Documentation](/documentation)')->inlineMarkdown()->toHtmlString())
-    ->hintIcon('heroicon-m-question-mark-circle', tooltip: 'Read it!')
-```
 
 ## Hiding entries
 

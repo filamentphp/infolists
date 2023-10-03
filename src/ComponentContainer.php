@@ -24,17 +24,14 @@ class ComponentContainer extends ViewComponent
 
     protected string $viewIdentifier = 'container';
 
-    final public function __construct(?Component $livewire = null)
+    final public function __construct(Component $livewire = null)
     {
         $this->livewire($livewire);
     }
 
-    public static function make(?Component $livewire = null): static
+    public static function make(Component $livewire = null): static
     {
-        $static = app(static::class, ['livewire' => $livewire]);
-        $static->configure();
-
-        return $static;
+        return app(static::class, ['livewire' => $livewire]);
     }
 
     /**

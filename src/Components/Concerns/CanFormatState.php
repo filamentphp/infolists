@@ -6,13 +6,12 @@ use Closure;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
 use Filament\Support\Contracts\HasLabel as LabelInterface;
+use function Filament\Support\format_money;
+use function Filament\Support\format_number;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\HtmlString;
 use Illuminate\Support\Str;
 use Illuminate\Support\Stringable;
-
-use function Filament\Support\format_money;
-use function Filament\Support\format_number;
 
 trait CanFormatState
 {
@@ -36,6 +35,8 @@ trait CanFormatState
 
     protected bool | Closure $isMarkdown = false;
 
+    protected string | Closure | null $placeholder = null;
+
     public function markdown(bool | Closure $condition = true): static
     {
         $this->isMarkdown = $condition;
@@ -43,7 +44,7 @@ trait CanFormatState
         return $this;
     }
 
-    public function date(?string $format = null, ?string $timezone = null): static
+    public function date(string $format = null, string $timezone = null): static
     {
         $format ??= Infolist::$defaultDateDisplayFormat;
 
@@ -60,7 +61,7 @@ trait CanFormatState
         return $this;
     }
 
-    public function dateTime(?string $format = null, ?string $timezone = null): static
+    public function dateTime(string $format = null, string $timezone = null): static
     {
         $format ??= Infolist::$defaultDateTimeDisplayFormat;
 
@@ -69,7 +70,7 @@ trait CanFormatState
         return $this;
     }
 
-    public function since(?string $timezone = null): static
+    public function since(string $timezone = null): static
     {
         $this->formatStateUsing(static function (TextEntry $component, $state) use ($timezone): ?string {
             if (blank($state)) {
@@ -84,7 +85,7 @@ trait CanFormatState
         return $this;
     }
 
-    public function money(string | Closure | null $currency = null, int $divideBy = 0): static
+    public function money(string | Closure $currency = null, int $divideBy = 0): static
     {
         $this->formatStateUsing(static function (TextEntry $component, $state) use ($currency, $divideBy): ?string {
             if (blank($state)) {
@@ -99,7 +100,7 @@ trait CanFormatState
         return $this;
     }
 
-    public function numeric(int | Closure | null $decimalPlaces = null, string | Closure | null $decimalSeparator = '.', string | Closure | null $thousandsSeparator = ','): static
+    public function numeric(int | Closure $decimalPlaces = null, string | Closure | null $decimalSeparator = '.', string | Closure | null $thousandsSeparator = ','): static
     {
         $this->formatStateUsing(static function (TextEntry $component, $state) use ($decimalPlaces, $decimalSeparator, $thousandsSeparator): ?string {
             if (blank($state)) {
@@ -125,7 +126,7 @@ trait CanFormatState
         return $this;
     }
 
-    public function time(?string $format = null, ?string $timezone = null): static
+    public function time(string $format = null, string $timezone = null): static
     {
         $format ??= Infolist::$defaultTimeDisplayFormat;
 
@@ -137,6 +138,13 @@ trait CanFormatState
     public function timezone(string | Closure | null $timezone): static
     {
         $this->timezone = $timezone;
+
+        return $this;
+    }
+
+    public function placeholder(string | Closure | null $placeholder): static
+    {
+        $this->placeholder = $placeholder;
 
         return $this;
     }
@@ -213,6 +221,10 @@ trait CanFormatState
 
         if ($state instanceof HtmlString) {
             return $state;
+        }
+
+        if (blank($state)) {
+            $state = $this->evaluate($this->placeholder);
         }
 
         if ($this->isHtml()) {

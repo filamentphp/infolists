@@ -79,8 +79,8 @@ trait HasState
                 $state;
         }
 
-        if (blank($state)) {
-            $state = $this->getDefaultState();
+        if ($state === null) {
+            $state = value($this->getDefaultState());
         }
 
         return $state;

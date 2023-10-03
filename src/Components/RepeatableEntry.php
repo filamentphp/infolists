@@ -2,14 +2,15 @@
 
 namespace Filament\Infolists\Components;
 
+use Closure;
 use Filament\Infolists\ComponentContainer;
-use Filament\Support\Concerns\CanBeContained;
 use Illuminate\Database\Eloquent\Model;
 
 class RepeatableEntry extends Entry
 {
-    use CanBeContained;
     use Concerns\HasContainerGridLayout;
+
+    protected bool | Closure $isWrappedInCard = true;
 
     /**
      * @var view-string
@@ -38,5 +39,17 @@ class RepeatableEntry extends Entry
         }
 
         return $containers;
+    }
+
+    public function wrappedInCard(bool | Closure $condition = true): static
+    {
+        $this->isWrappedInCard = $condition;
+
+        return $this;
+    }
+
+    public function isWrappedInCard(): bool
+    {
+        return (bool) $this->evaluate($this->isWrappedInCard);
     }
 }

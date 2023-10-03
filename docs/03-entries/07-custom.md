@@ -1,17 +1,10 @@
 ---
 title: Custom entries
 ---
-import LaracastsBanner from "@components/LaracastsBanner.astro"
-
-<LaracastsBanner
-    title="Build a Custom Infolist Entry"
-    description="Watch the Build Advanced Components for Filament series on Laracasts - it will teach you how to build components, and you'll get to know all the internal tools to help you."
-    url="https://laracasts.com/series/build-advanced-components-for-filament/episodes/8"
-/>
 
 ## View entries
 
-You may render a custom view for an entry using the `view()` method:
+You may render a custom view for a entry using the `view()` method:
 
 ```php
 use Filament\Infolists\Components\ViewEntry;

@@ -3,7 +3,6 @@
 namespace Filament\Infolists\Components;
 
 use Closure;
-use Filament\Infolists\Components\Concerns\HasHeaderActions;
 use Filament\Support\Concerns\HasDescription;
 use Filament\Support\Concerns\HasExtraAlpineAttributes;
 use Filament\Support\Concerns\HasHeading;
@@ -12,14 +11,13 @@ use Filament\Support\Concerns\HasIconColor;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Str;
 
-class Section extends Component implements Contracts\HasHeaderActions
+class Section extends Component
 {
     use Concerns\CanBeCollapsed;
     use Concerns\CanBeCompacted;
     use Concerns\EntanglesStateWithSingularRelationship;
     use HasDescription;
     use HasExtraAlpineAttributes;
-    use HasHeaderActions;
     use HasHeading;
     use HasIcon;
     use HasIconColor;
@@ -89,11 +87,6 @@ class Section extends Component implements Contracts\HasHeaderActions
         }
 
         return $id;
-    }
-
-    public function getKey(): ?string
-    {
-        return parent::getKey() ?? $this->getId();
     }
 
     public function isAside(): bool

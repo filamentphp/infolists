@@ -7,11 +7,11 @@ return [
         'text' => [
 
             'actions' => [
-                'collapse_list' => ':countta kam ko\'rsatish',
-                'expand_list' => 'Yana :counttasini k\'rsatish',
+                'collapse_list' => 'Vis :count mindre',
+                'expand_list' => 'Vis :count flere',
             ],
 
-            'more_list_items' => 'va yana :countta',
+            'more_list_items' => 'og :count flere',
 
         ],
 
@@ -20,11 +20,11 @@ return [
             'columns' => [
 
                 'key' => [
-                    'label' => 'Kalit so\'zi',
+                    'label' => 'Nøgle',
                 ],
 
                 'value' => [
-                    'label' => 'Qiymati',
+                    'label' => 'Værdi',
                 ],
 
             ],

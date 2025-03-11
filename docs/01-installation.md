@@ -18,7 +18,7 @@ Filament requires the following to run:
 Require the Infolist Builder package using Composer:
 
 ```bash
-composer require filament/infolists:"^3.2" -W
+composer require filament/infolists:"^3.3" -W
 ```
 
 ## New Laravel projects

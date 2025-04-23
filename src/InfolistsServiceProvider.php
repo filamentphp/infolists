@@ -2,8 +2,7 @@
 
 namespace Filament\Infolists;
 
-use Filament\Infolists\Testing\TestsInfolistActions;
-use Illuminate\Filesystem\Filesystem;
+use Filament\Infolists\Testing\TestsActions;
 use Livewire\Features\SupportTesting\Testable;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
@@ -14,23 +13,41 @@ class InfolistsServiceProvider extends PackageServiceProvider
     {
         $package
             ->name('filament-infolists')
-            ->hasCommands([
-                Commands\MakeEntryCommand::class,
-            ])
+            ->hasCommands($this->getCommands())
             ->hasTranslations()
             ->hasViews();
     }
 
     public function packageBooted(): void
     {
-        if ($this->app->runningInConsole()) {
-            foreach (app(Filesystem::class)->files(__DIR__ . '/../stubs/') as $file) {
-                $this->publishes([
-                    $file->getRealPath() => base_path("stubs/filament/{$file->getFilename()}"),
-                ], 'filament-stubs');
+        Testable::mixin(new TestsActions);
+    }
+
+    /**
+     * @return array<class-string>
+     */
+    protected function getCommands(): array
+    {
+        $commands = [
+            Commands\MakeEntryCommand::class,
+            Commands\MakeLayoutComponentCommand::class,
+        ];
+
+        $aliases = [];
+
+        foreach ($commands as $command) {
+            $class = 'Filament\\Infolists\\Commands\\Aliases\\' . class_basename($command);
+
+            if (! class_exists($class)) {
+                continue;
             }
+
+            $aliases[] = $class;
         }
 
-        Testable::mixin(new TestsInfolistActions);
+        return [
+            ...$commands,
+            ...$aliases,
+        ];
     }
 }

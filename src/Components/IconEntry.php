@@ -30,11 +30,17 @@ class IconEntry extends Entry implements HasEmbeddedView
 
     protected bool | Closure | null $isBoolean = null;
 
-    protected string | Closure | null $falseColor = null;
+    /**
+     * @var string | array<string> | Closure | null
+     */
+    protected string | array | Closure | null $falseColor = null;
 
     protected string | BackedEnum | Closure | null $falseIcon = null;
 
-    protected string | Closure | null $trueColor = null;
+    /**
+     * @var string | array<string> | Closure | null
+     */
+    protected string | array | Closure | null $trueColor = null;
 
     protected string | BackedEnum | Closure | null $trueIcon = null;
 
@@ -60,7 +66,10 @@ class IconEntry extends Entry implements HasEmbeddedView
         return $this;
     }
 
-    public function falseColor(string | Closure | null $color): static
+    /**
+     * @param  string | array<string> | Closure | null  $color
+     */
+    public function falseColor(string | array | Closure | null $color): static
     {
         $this->boolean();
         $this->falseColor = $color;
@@ -87,7 +96,10 @@ class IconEntry extends Entry implements HasEmbeddedView
         return $this;
     }
 
-    public function trueColor(string | Closure | null $color): static
+    /**
+     * @param  string | array<string> | Closure | null  $color
+     */
+    public function trueColor(string | array | Closure | null $color): static
     {
         $this->boolean();
         $this->trueColor = $color;
@@ -154,7 +166,10 @@ class IconEntry extends Entry implements HasEmbeddedView
         return $state ? $this->getTrueColor() : $this->getFalseColor();
     }
 
-    public function getFalseColor(): string
+    /**
+     * @return string | array<string>
+     */
+    public function getFalseColor(): string | array
     {
         return $this->evaluate($this->falseColor) ?? 'danger';
     }
@@ -166,7 +181,10 @@ class IconEntry extends Entry implements HasEmbeddedView
             ?? Heroicon::OutlinedXCircle;
     }
 
-    public function getTrueColor(): string
+    /**
+     * @return string | array<string>
+     */
+    public function getTrueColor(): string | array
     {
         return $this->evaluate($this->trueColor) ?? 'success';
     }

@@ -15,6 +15,7 @@ Entry classes can be found in the `Filament\Infolists\Components` namespace. The
 - [Icon entry](icon-entry)
 - [Image entry](image-entry)
 - [Color entry](color-entry)
+- [Code entry](code-entry)
 - [Key-value entry](key-value-entry)
 - [Repeatable entry](repeatable-entry)
 

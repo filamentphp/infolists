@@ -31,7 +31,7 @@ ColorEntry::make('color')
 
 <AutoScreenshot name="infolists/entries/color/copyable" alt="Color entry with a button to copy it" version="4.x" />
 
-Optionally, you may pass a boolean value to control if the text should be copyable or not:
+Optionally, you may pass a boolean value to control if the color should be copyable or not:
 
 ```php
 use Filament\Infolists\Components\ColorEntry;

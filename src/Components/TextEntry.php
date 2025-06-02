@@ -20,6 +20,7 @@ use Filament\Support\Enums\IconPosition;
 use Filament\Support\Enums\IconSize;
 use Filament\Support\Enums\TextSize;
 use Filament\Support\View\Components\BadgeComponent;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Js;
@@ -526,5 +527,109 @@ class TextEntry extends Entry implements HasAffixActions, HasEmbeddedView
     public function canWrapByDefault(): bool
     {
         return true;
+    }
+
+    /**
+     * @param  string | array<int | string, string | Closure> | Closure | null  $relationship
+     */
+    public function avg(string | array | Closure | null $relationship, string | Closure | null $column): static
+    {
+        $this->state(function (TextEntry $entry, ?Model $record) use ($relationship, $column): int | float | null {
+            if (blank($record)) {
+                return null;
+            }
+
+            $record->loadAvg(
+                $entry->evaluate($relationship),
+                $entry->evaluate($column),
+            );
+
+            return $record->getAttributeValue($entry->getName());
+        });
+
+        return $this;
+    }
+
+    /**
+     * @param  string | array<int | string, string | Closure> | Closure | null  $relationships
+     */
+    public function counts(string | array | Closure | null $relationships): static
+    {
+        $this->state(function (TextEntry $entry, ?Model $record) use ($relationships): int | float | null {
+            if (blank($record)) {
+                return null;
+            }
+
+            $record->loadCount(
+                $entry->evaluate($relationships),
+            );
+
+            return $record->getAttributeValue($entry->getName());
+        });
+
+        return $this;
+    }
+
+    /**
+     * @param  string | array<int | string, string | Closure> | Closure | null  $relationship
+     */
+    public function max(string | array | Closure | null $relationship, string | Closure | null $column): static
+    {
+        $this->state(function (TextEntry $entry, ?Model $record) use ($relationship, $column): int | float | null {
+            if (blank($record)) {
+                return null;
+            }
+
+            $record->loadMax(
+                $entry->evaluate($relationship),
+                $entry->evaluate($column),
+            );
+
+            return $record->getAttributeValue($entry->getName());
+        });
+
+        return $this;
+    }
+
+    /**
+     * @param  string | array<int | string, string | Closure> | Closure | null  $relationship
+     */
+    public function min(string | array | Closure | null $relationship, string | Closure | null $column): static
+    {
+        $this->state(function (TextEntry $entry, ?Model $record) use ($relationship, $column): int | float | null {
+            if (blank($record)) {
+                return null;
+            }
+
+            $record->loadMin(
+                $entry->evaluate($relationship),
+                $entry->evaluate($column),
+            );
+
+            return $record->getAttributeValue($entry->getName());
+        });
+
+        return $this;
+    }
+
+    /**
+     * @param  string | array<int | string, string | Closure> | Closure | null  $relationship
+     */
+    public function sum(string | array | Closure | null $relationship, string | Closure | null $column): static
+    {
+        $this->state(function (TextEntry $entry, ?Model $record) use ($relationship, $column): int | float | null {
+            if (blank($record)) {
+                return null;
+            }
+
+            $record->loadSum(
+                $entry->evaluate($relationship),
+                $entry->evaluate($column),
+            );
+
+            return $record->getAttributeValue($entry->getName());
+        });
+
+        return $this;
     }
 }

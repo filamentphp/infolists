@@ -266,6 +266,23 @@ TextEntry::make('created_at')
 
 <UtilityInjection set="infolistEntries" version="4.x">As well as allowing static values, the `timezone()` method also accepts a function to dynamically calculate the timezone. You can inject various utilities into the function as parameters.</UtilityInjection>
 
+If you do not pass a `timezone()` to the entry, it will use Filament's default timezone. You can set Filament's default timezone using the `FilamentTimezone::set()` method in the `boot()` method of a service provider such as `AppServiceProvider`:
+
+```php
+use Filament\Support\Facades\FilamentTimezone;
+
+public function boot(): void
+{
+    FilamentTimezone::set('America/New_York');
+}
+```
+
+This is useful if you want to set a default timezone for all text entries in your application. It is also used in other places where timezones are used in Filament.
+
+<Aside variant="warning">
+    Filament's default timezone will only apply when the entry stores a time. If the entry stores a date only (`date()` instead of `dateTime()`), the timezone will not be applied. This is to prevent timezone shifts when storing dates without times.
+</Aside>
+
 ### Number formatting
 
 Instead of passing a function to `formatStateUsing()`, you can use the `numeric()` method to format an entry as a number:
@@ -523,6 +540,29 @@ TextEntry::make('tags')
 ```
 
 <UtilityInjection set="infolistEntries" version="4.x">As well as allowing a static value, the `separator()` method also accepts a function to dynamically calculate it. You can inject various utilities into the function as parameters.</UtilityInjection>
+
+## Aggregating relationships
+
+Filament provides several methods for aggregating a relationship field, including `avg()`, `max()`, `min()` and `sum()`. For instance, if you wish to show the average of a field on all related records, you may use the `avg()` method:
+
+```php
+use Filament\Infolists\Components\TextEntry;
+
+TextEntry::make('users_avg_age')->avg('users', 'age')
+```
+
+In this example, `users` is the name of the relationship, while `age` is the field that is being averaged. The name of the entry must be `users_avg_age`, as this is the convention that [Laravel uses](https://laravel.com/docs/eloquent-relationships#other-aggregate-functions) for storing the result.
+
+If you'd like to scope the relationship before calculating, you can pass an array to the method, where the key is the relationship name and the value is the function to scope the Eloquent query with:
+
+```php
+use Filament\Infolists\Components\TextEntry;
+use Illuminate\Database\Eloquent\Builder;
+
+TextEntry::make('users_avg_age')->avg([
+    'users' => fn (Builder $query) => $query->where('is_active', true),
+], 'age')
+```
 
 ## Customizing the text size
 

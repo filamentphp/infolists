@@ -114,6 +114,13 @@ class Entry extends Component
         return $this;
     }
 
+    public function getStateUsing(mixed $callback): static
+    {
+        $this->state($callback);
+
+        return $this;
+    }
+
     /**
      * @param  array<Component | Action | ActionGroup | string | Htmlable> | Schema | Component | Action | ActionGroup | string | Htmlable | Closure | null  $components
      */

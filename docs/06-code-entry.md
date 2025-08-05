@@ -76,9 +76,9 @@ CodeEntry::make('code')
 Optionally, you may pass a boolean value to control if the code should be copyable or not:
 
 ```php
-use Filament\Infolists\Components\ColorEntry;
+use Filament\Infolists\Components\CodeEntry;
 
-ColorEntry::make('color')
+CodeEntry::make('code')
     ->copyable(FeatureFlag::active())
 ```
 

@@ -17,7 +17,7 @@
             @class([
                 'fi-in-entry-wrp-hint-label',
                 match ($color) {
-                    'gray' => 'text-gray-500',
+                    'gray' => 'text-gray-500 dark:text-gray-400',
                     default => 'fi-color-custom text-custom-600 dark:text-custom-400',
                 },
                 is_string($color) ? "fi-color-{$color}" : null,

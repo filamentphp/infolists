@@ -88,6 +88,8 @@ trait CanGenerateModelInfolists
 
                     $componentName = "{$guessedRelationshipName}.{$guessedRelationshipTitleColumnName}";
                 }
+            } else {
+                $guessedRelationshipName = null;
             }
 
             $componentData = [];
@@ -134,7 +136,7 @@ trait CanGenerateModelInfolists
                     'float',
                     'double',
                     'money',
-                ])) {
+                ]) && blank($guessedRelationshipName)) {
                     $componentData[in_array($componentName, [
                         'cost',
                         'money',

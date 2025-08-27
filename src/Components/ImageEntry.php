@@ -431,6 +431,12 @@ class ImageEntry extends Entry implements HasEmbeddedView
                 'fi-in-image',
             ]);
 
+        $defaultImageUrl = $this->getDefaultImageUrl();
+
+        if (blank($state) && filled($defaultImageUrl)) {
+            $state = [null];
+        }
+
         if (blank($state)) {
             $attributes = $attributes
                 ->merge([
@@ -478,8 +484,6 @@ class ImageEntry extends Entry implements HasEmbeddedView
         $limitedRemainingTextSize = $this->getLimitedRemainingTextSize();
         $height = $this->getImageHeight() ?? ($isStacked ? '2.5rem' : '8rem');
         $width = $this->getImageWidth() ?? (($isCircular || $isSquare) ? $height : null);
-
-        $defaultImageUrl = $this->getDefaultImageUrl();
 
         $attributes = $attributes
             ->class([

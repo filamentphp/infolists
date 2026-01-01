@@ -28,7 +28,7 @@ Action::make('resetStars')
 
 Certain entries support "affix actions", which are buttons that can be placed before or after its content. The following entries support affix actions:
 
-- [Text entry](entries/text-entry)
+- [Text entry](entries/text)
 
 To define an affix action, you can pass it to either `prefixAction()` or `suffixAction()`:
 

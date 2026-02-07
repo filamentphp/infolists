@@ -16,7 +16,7 @@ trait HasState
      */
     protected ?array $state = null;
 
-    protected string $cachedAbsoluteStatePath;
+    protected ?string $cachedAbsoluteStatePath = null;
 
     /**
      * @param  array<string, mixed> | null  $state
@@ -44,7 +44,7 @@ trait HasState
 
     public function getStatePath(bool $isAbsolute = true): string
     {
-        if (isset($this->cachedAbsoluteStatePath)) {
+        if ($this->cachedAbsoluteStatePath !== null) {
             return $this->cachedAbsoluteStatePath;
         }
 
@@ -92,6 +92,6 @@ trait HasState
 
     protected function flushCachedAbsoluteStatePath(): void
     {
-        unset($this->cachedAbsoluteStatePath);
+        $this->cachedAbsoluteStatePath = null;
     }
 }

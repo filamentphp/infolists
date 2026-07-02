@@ -20,7 +20,6 @@ use Filament\Support\Enums\FontWeight;
 use Filament\Support\Enums\IconPosition;
 use Filament\Support\Enums\IconSize;
 use Filament\Support\Enums\TextSize;
-use Filament\Support\View\ComponentAttributeBag as FilamentComponentAttributeBag;
 use Filament\Support\View\Components\BadgeComponent;
 use Illuminate\Contracts\Database\Query\Expression;
 use Illuminate\Contracts\Support\Htmlable;
@@ -216,7 +215,7 @@ class TextEntry extends Entry implements HasAffixActions, HasEmbeddedView
 
         $shouldOpenUrlInNewTab = $this->shouldOpenUrlInNewTab();
 
-        $formatState = function (mixed $stateItem, mixed $formattedState = null) use ($shouldOpenUrlInNewTab): string {
+        $formatState = function (mixed $stateItem) use ($shouldOpenUrlInNewTab): string {
             $url = $this->getUrl($stateItem);
 
             $item = '';
@@ -225,7 +224,7 @@ class TextEntry extends Entry implements HasAffixActions, HasEmbeddedView
                 $item .= '<a ' . generate_href_html($url, $shouldOpenUrlInNewTab)->toHtml() . '>';
             }
 
-            $item .= e($formattedState ?? $this->formatState($stateItem));
+            $item .= e($this->formatState($stateItem));
 
             if (filled($url)) {
                 $item .= '</a>';
@@ -253,8 +252,6 @@ class TextEntry extends Entry implements HasAffixActions, HasEmbeddedView
             }
         }
 
-        $isCollapsedList = false;
-
         if (($stateCount > 1) && (! $isListWithLineBreaks) && (! $isBadge)) {
             $state = [
                 implode(
@@ -267,8 +264,7 @@ class TextEntry extends Entry implements HasAffixActions, HasEmbeddedView
             ];
 
             $stateCount = 1;
-            $formatState = fn (mixed $stateItem, mixed $formattedState = null): string => $stateItem;
-            $isCollapsedList = true;
+            $formatState = fn (mixed $stateItem): string => $stateItem;
         }
 
         $alignment = $this->getAlignment();
@@ -286,13 +282,13 @@ class TextEntry extends Entry implements HasAffixActions, HasEmbeddedView
         $isProse = $this->isProse();
         $isMarkdown = $this->isMarkdown();
 
-        $getStateItem = function (mixed $stateItem, mixed $formattedState = null) use ($iconPosition, $isBadge, $isMarkdown, $isProse, $lineClamp): array {
+        $getStateItem = function (mixed $stateItem) use ($iconPosition, $isBadge, $isMarkdown, $isProse, $lineClamp): array {
             $color = $this->getColor($stateItem) ?? ($isBadge ? 'primary' : null);
             $iconColor = $this->getIconColor($stateItem);
 
             $size = $this->getSize($stateItem);
 
-            $iconHtml = generate_icon_html($this->getIcon($stateItem), attributes: (new FilamentComponentAttributeBag)
+            $iconHtml = generate_icon_html($this->getIcon($stateItem), attributes: (new ComponentAttributeBag)
                 ->color(IconComponent::class, $iconColor), size: match ($size) {
                     TextSize::Medium => IconSize::Medium,
                     TextSize::Large => IconSize::Large,
@@ -302,7 +298,7 @@ class TextEntry extends Entry implements HasAffixActions, HasEmbeddedView
             $isCopyable = $this->isCopyable($stateItem);
 
             if ($isCopyable) {
-                $copyableStateJs = Js::from($this->getCopyableState($stateItem) ?? $formattedState ?? $this->formatState($stateItem));
+                $copyableStateJs = Js::from($this->getCopyableState($stateItem) ?? $this->formatState($stateItem));
                 $copyMessageJs = Js::from($this->getCopyMessage($stateItem));
                 $copyMessageDurationJs = Js::from($this->getCopyMessageDuration($stateItem));
             }
@@ -310,7 +306,7 @@ class TextEntry extends Entry implements HasAffixActions, HasEmbeddedView
             $tooltip = $this->getTooltip($stateItem);
 
             return [
-                'attributes' => (new FilamentComponentAttributeBag)
+                'attributes' => (new ComponentAttributeBag)
                     ->class([
                         'fi-in-text-item',
                         'fi-prose' => $isProse || $isMarkdown,
@@ -329,7 +325,7 @@ class TextEntry extends Entry implements HasAffixActions, HasEmbeddedView
                             ->color(ItemComponent::class, $color)
                     ),
                 'contentAttributes' => ($isBadge || $isCopyable || filled($tooltip))
-                    ? (new FilamentComponentAttributeBag)
+                    ? (new ComponentAttributeBag)
                         ->merge([
                             'x-on:click' => $isCopyable
                                 ? <<<JS
@@ -385,13 +381,12 @@ class TextEntry extends Entry implements HasAffixActions, HasEmbeddedView
             empty($suffixActions)
         ) {
             $stateItem = Arr::first($state);
-            $stateItemFormattedState = $isCollapsedList ? null : $this->formatState($stateItem);
             [
                 'attributes' => $stateItemAttributes,
                 'contentAttributes' => $stateItemContentAttributes,
                 'iconAfterHtml' => $stateItemIconAfterHtml,
                 'iconBeforeHtml' => $stateItemIconBeforeHtml,
-            ] = $getStateItem($stateItem, $stateItemFormattedState);
+            ] = $getStateItem($stateItem);
 
             ob_start(); ?>
 
@@ -403,7 +398,7 @@ class TextEntry extends Entry implements HasAffixActions, HasEmbeddedView
                 <?php } ?>
 
                 <?= $stateItemIconBeforeHtml ?>
-                <?= $formatState($stateItem, $stateItemFormattedState) ?>
+                <?= $formatState($stateItem) ?>
                 <?= $stateItemIconAfterHtml ?>
 
                 <?php if ($stateItemContentAttributes) { ?>
@@ -451,13 +446,12 @@ class TextEntry extends Entry implements HasAffixActions, HasEmbeddedView
                     <?php $stateIteration = 1; ?>
 
                     <?php foreach ($state as $stateItem) { ?>
-                        <?php $stateItemFormattedState = $isCollapsedList ? null : $this->formatState($stateItem); ?>
                         <?php [
                             'attributes' => $stateItemAttributes,
                             'contentAttributes' => $stateItemContentAttributes,
                             'iconAfterHtml' => $stateItemIconAfterHtml,
                             'iconBeforeHtml' => $stateItemIconBeforeHtml,
-                        ] = $getStateItem($stateItem, $stateItemFormattedState); ?>
+                        ] = $getStateItem($stateItem); ?>
 
                         <li
                             <?php if ($stateIteration > $listLimit) { ?>
@@ -472,7 +466,7 @@ class TextEntry extends Entry implements HasAffixActions, HasEmbeddedView
                             <?php } ?>
 
                             <?= $stateItemIconBeforeHtml ?>
-                            <?= $formatState($stateItem, $stateItemFormattedState) ?>
+                            <?= $formatState($stateItem) ?>
                             <?= $stateItemIconAfterHtml ?>
 
                             <?php if ($stateItemContentAttributes) { ?>
@@ -531,13 +525,12 @@ class TextEntry extends Entry implements HasAffixActions, HasEmbeddedView
 
         <ul <?= $attributes->toHtml() ?>>
             <?php foreach ($state as $stateItem) { ?>
-                <?php $stateItemFormattedState = $isCollapsedList ? null : $this->formatState($stateItem); ?>
                 <?php [
                     'attributes' => $stateItemAttributes,
                     'contentAttributes' => $stateItemContentAttributes,
                     'iconAfterHtml' => $stateItemIconAfterHtml,
                     'iconBeforeHtml' => $stateItemIconBeforeHtml,
-                ] = $getStateItem($stateItem, $stateItemFormattedState); ?>
+                ] = $getStateItem($stateItem); ?>
 
                 <li <?= $stateItemAttributes->toHtml() ?>>
                     <?php if ($stateItemContentAttributes) { ?>
@@ -545,7 +538,7 @@ class TextEntry extends Entry implements HasAffixActions, HasEmbeddedView
                     <?php } ?>
 
                     <?= $stateItemIconBeforeHtml ?>
-                    <?= $formatState($stateItem, $stateItemFormattedState) ?>
+                    <?= $formatState($stateItem) ?>
                     <?= $stateItemIconAfterHtml ?>
 
                     <?php if ($stateItemContentAttributes) { ?>

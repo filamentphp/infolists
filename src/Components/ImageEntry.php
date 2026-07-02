@@ -7,7 +7,6 @@ use Filament\Support\Components\Contracts\HasEmbeddedView;
 use Filament\Support\Concerns\CanWrap;
 use Filament\Support\Enums\Alignment;
 use Filament\Support\Enums\TextSize;
-use Filament\Support\View\ComponentAttributeBag as FilamentComponentAttributeBag;
 use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Filesystem\FilesystemAdapter;
@@ -307,7 +306,7 @@ class ImageEntry extends Entry implements HasEmbeddedView
 
     public function getExtraImgAttributeBag(): ComponentAttributeBag
     {
-        return new FilamentComponentAttributeBag($this->getExtraImgAttributes());
+        return new ComponentAttributeBag($this->getExtraImgAttributes());
     }
 
     public function stacked(bool | Closure $condition = true): static
@@ -533,7 +532,7 @@ class ImageEntry extends Entry implements HasEmbeddedView
             <?php } ?>
 
             <?php if ($hasLimitedRemainingText) { ?>
-                <div <?= (new FilamentComponentAttributeBag)
+                <div <?= (new ComponentAttributeBag)
                 ->class([
                     'fi-in-image-limited-remaining-text',
                     (($limitedRemainingTextSize instanceof TextSize) ? "fi-size-{$limitedRemainingTextSize->value}" : $limitedRemainingTextSize) => $limitedRemainingTextSize,
